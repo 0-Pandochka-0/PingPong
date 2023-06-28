@@ -44,9 +44,9 @@ window.fill(color)
 #fire = mixer.Sound('fire.ogg')
 
 font.init()
-font1 = font.Font(None, 70)
-win_1 = font1.render('Первый игрок проиграл!', True, (255,215,0))
-win_2 = font1.render('Второк игрок проиграл!', True, (255,215,0))
+font1 = font.Font(None, 40)
+win_1 = font1.render('Первый игрок проиграл!', True, (200,0,200))
+win_2 = font1.render('Второк игрок проиграл!', True, (0,215,255))
 
 # Игроки и мяч
 hero1 = Player('platforma.png', 30, 200, 4, 20, 150)
@@ -85,11 +85,11 @@ while game:
         
         if myach.rect.x < 0:
             finish = True
-            window.blit(win_1, (160,220))
+            window.blit(win_1, (130,220))
         
         if myach.rect.x > 530:
             finish = True
-            window.blit(win_2, (160,220))
+            window.blit(win_2, (130,220))
         
             
 
