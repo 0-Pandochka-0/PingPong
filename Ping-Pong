@@ -1,0 +1,98 @@
+from pygame import *
+from random import *
+from time import time as times
+
+class GameSprite(sprite.Sprite):
+    def __init__(self, player_image, player_x, player_y, player_speed, r1, r2):
+        super().__init__()
+        self.image = transform.scale(image.load(player_image), (r1,r2))
+        self.speed = player_speed
+        self.rect = self.image.get_rect()
+        self.rect.x = player_x
+        self.rect.y = player_y
+    def reset(self):
+        window.blit(self.image, (self.rect.x, self.rect.y))
+
+class Player(GameSprite):
+    def update_l(self):
+        keys_pressed = key.get_pressed()
+
+        if keys_pressed[K_w] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_pressed[K_s] and self.rect.y < 360:
+            self.rect.y += self.speed
+
+    def update_r(self):
+        keys_pressed = key.get_pressed()
+
+        if keys_pressed[K_UP] and self.rect.y > 5:
+            self.rect.y -= self.speed
+        if keys_pressed[K_DOWN] and self.rect.y < 360:
+            self.rect.y += self.speed
+
+
+
+color = (200, 240, 240)
+window = display.set_mode((600,500))
+display.set_caption('Ping-Pong')
+window.fill(color)
+
+#mixer.init()
+#mixer.music.load('space.ogg')
+#mixer.music.play()
+
+#fire = mixer.Sound('fire.ogg')
+
+font.init()
+font1 = font.Font(None, 70)
+win_1 = font1.render('Первый игрок проиграл!', True, (255,215,0))
+win_2 = font1.render('Второк игрок проиграл!', True, (255,215,0))
+
+# Игроки и мяч
+hero1 = Player('platforma.png', 30, 200, 4, 20, 150)
+hero2 = Player('platforma2.png', 520, 200, 4, 20, 150)
+myach = GameSprite('yoda.png', 200, 200, 4, 70, 70)
+
+
+clock = time.Clock()
+finish = False
+game = True
+
+speed_x = 4
+speed_y = 4
+while game:
+    for e in event.get():
+        if e.type == QUIT:
+            game = False      
+
+    if finish != True:
+        window.fill(color)
+        hero1.reset()
+        hero2.reset()
+        myach.reset()
+
+        myach.rect.x += speed_x
+        myach.rect.y += speed_y
+
+        hero1.update_l()
+        hero2.update_r()
+
+        if myach.rect.y < 0 or myach.rect.y > 430:
+            speed_y *= -1
+        
+        if sprite.collide_rect(hero1, myach) or sprite.collide_rect(hero2, myach):
+            speed_x *= -1
+        
+        if myach.rect.x < 0:
+            finish = True
+            window.blit(win_1, (160,220))
+        
+        if myach.rect.x > 530:
+            finish = True
+            window.blit(win_2, (160,220))
+        
+            
+
+
+    display.update()
+    clock.tick(60)
